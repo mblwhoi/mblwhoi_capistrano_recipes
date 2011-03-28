@@ -20,6 +20,7 @@ require "#{app_settings_file}"
 
 # Set default scm settings.
 set :scm, :git
+set :git_enable_submodules, true
 
 # Set deploy_to.  apps_dir is typically set in stage files.
 set (:deploy_to) { "#{apps_dir}/#{application}" }
