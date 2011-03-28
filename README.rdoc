@@ -1,0 +1,9 @@
+This repository contains resources for MBLWHOI capistrano recipes.
+
+The default recipe, defined in config/deploy.rb, loads configuration from 'stage' files and 'app' files.  The 'stage' and 'app' are indicated via the '-S' flag on the command line.  This allows for common configuration settings to be shared and loaded dynamically.
+
+Stage files are stored in config/stages.  
+
+App files are stored in config/apps.
+
+There is also an mblwhoi_drupal.rb file which defines drupal-specific tasks in an mblwhoi_drupal namespace.
