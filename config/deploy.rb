@@ -25,4 +25,16 @@ set :git_enable_submodules, true
 # Set deploy_to.  apps_dir is typically set in stage files.
 set (:deploy_to) { "#{apps_dir}/#{application}" }
 
+# Task for copying files to a path relative to the shared directory root.
+desc "Copy to path in shared folder"
+task :scp_to_shared do
 
+  # Raise errors if params were not given.
+  if (! exists?(:source_path) || ! exists?(:target_path))
+    raise Error, "Both 'source_path' and 'target_path' must be provided.  Use command line switch -S e.g. '-S source_path=my_source_path -S target_path=path/relative/to/shared'"
+  end
+
+  # Upload the dump file.
+  upload("#{source_path}", "#{deploy_to}/shared/#{target_path}", :via => :scp, :recursive => true)
+
+end
