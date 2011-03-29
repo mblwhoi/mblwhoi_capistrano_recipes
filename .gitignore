@@ -1,3 +1,4 @@
-scripts
+scripts/deploy_apps/dla
+scripts/deploy_apps/mblwhoilibrary
 config/apps
 config/stages
