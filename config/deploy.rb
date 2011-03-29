@@ -25,16 +25,37 @@ set :git_enable_submodules, true
 # Set deploy_to.  apps_dir is typically set in stage files.
 set (:deploy_to) { "#{apps_dir}/#{application}" }
 
-# Task for copying files to a path relative to the shared directory root.
-desc "Copy to path in shared folder"
-task :scp_to_shared do
+# Custom tasks namespace.
+namespace :mblwhoi do
 
-  # Raise errors if params were not given.
-  if (! exists?(:source_path) || ! exists?(:target_path))
-    raise Error, "Both 'source_path' and 'target_path' must be provided.  Use command line switch -S e.g. '-S source_path=my_source_path -S target_path=path/relative/to/shared'"
+  # Task for copying files to a path relative to the shared directory root.
+  desc "Copy to path in shared folder"
+  task :scp_to_shared do
+
+    # Raise errors if params were not given.
+    if (! exists?(:local_path) || ! exists?(:target_path))
+      raise Error, "Both 'local_path' and 'target_path' must be provided.  Use command line switch -S e.g. '-S local_path=my_local_path -S target_path=path/relative/to/shared'"
+    end
+
+    # Make a unique name for the dump file on the target server by
+    # appending the process id of this process.
+    dumpfile_basename = File.basename("#{local_path}")
+    tmp_dumpfile_path = "/tmp/#{dumpfile_basename}.#{$$}"
+
+    # Generate destination path on remote host.
+    destination_path = "#{deploy_to}/shared/#{target_path}"
+
+    # Upload the dump file.
+    upload("#{local_path}", tmp_dumpfile_path, :via => :scp, :recursive => true)
+
+    # Grant ownership to web group if indicated.
+    if (exists?(:grant_web_group) && exists?(:web_group))
+      run "chown -R #{user}:#{web_group} #{tmp_dumpfile_path}"
+    end
+
+    # Move dumpfile to destination path via rsync.
+    run "rsync -a #{tmp_dumpfile_path}/ #{destination_path}"
+
   end
 
-  # Upload the dump file.
-  upload("#{source_path}", "#{deploy_to}/shared/#{target_path}", :via => :scp, :recursive => true)
-
-end
+end # namespace :mblwhoi
