@@ -63,7 +63,7 @@ namespace :mblwhoi_drupal do
     upload(local_dump_file, "#{tmp_dumpfile_path}", :via => :scp)
 
     # Import the dump on the target server.
-    run "cd #{deploy_to}/current/drupal_root; `drush sql-connect` < #{tmp_dumpfile_path}"
+    run "cd #{deploy_to}/current; `drush sql-connect` < #{tmp_dumpfile_path}"
 
     # Remove the temporary dump file on the target server.
     run "rm #{tmp_dumpfile_path}"
@@ -89,7 +89,7 @@ namespace :mblwhoi_drupal do
 
     # Run the script on the target server from the drupal dir.
     # The script is presumed to be the file 'script.sh'
-    run "cd #{deploy_to}/current/drupal_root; #{tmp_script_dir_path}/script.sh"
+    run "cd #{deploy_to}/current; #{tmp_script_dir_path}/script.sh"
 
     # Remove the temporary script dir on the target server.
     if "#{tmp_script_dir_path}".length > 0
