@@ -24,7 +24,7 @@ clear_cache_script_dir="$cap_root/scripts/drupal_scripts/clear_cache"
 cd $cap_root;
 
 # Deploy drupal sites.
-for app_name in `cat "$script_dir/$app_ns/${app_ns}_drupal_apps.txt"`;
+for app_name in `cat "$script_dir/$app_ns/drupal_apps.txt"`;
 do
 
     CMD="$script_dir/deploy_drupal_app.sh $app_ns $stage $app_name"

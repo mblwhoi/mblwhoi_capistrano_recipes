@@ -30,6 +30,9 @@ cd $cap_root;
 # Set app id.
 app_id="$app_ns/$app_name"
 
+# Deploy app code.
+cap mblwhoi_drupal:deploy -S stage=$stage -S app=$app_id
+
 # Synch app's db.
 cap mblwhoi_drupal:import_db_dump -S stage=$stage -S app=$app_id -S local_dump_file=$db_dir/$app_name.sql
 
