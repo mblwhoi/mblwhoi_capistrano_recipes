@@ -7,8 +7,11 @@ namespace :mblwhoi_drupal do
     # Symlink drupal default sites folder.
     run "ln -nfs #{shared_path}/sites/default #{release_path}/sites/default"
 
-    # Symlink release path to drupal_root of site.
-    run "rm -f #{current_path} && ln -s #{latest_release}/drupal_root #{current_path}"
+    # Symlink current release to current path
+    run "ln -nsf #{latest_release} #{current_path}"
+
+    # Symlink drupal_root of current release to symlink_to.
+    run "ln -nsf #{current_path}/drupal_root #{symlink_to}"
 
   end # task :symlink
   
@@ -63,7 +66,7 @@ namespace :mblwhoi_drupal do
     upload(local_dump_file, "#{tmp_dumpfile_path}", :via => :scp)
 
     # Import the dump on the target server.
-    run "cd #{deploy_to}/current; `drush sql-connect` < #{tmp_dumpfile_path}"
+    run "cd #{deploy_to}/current/drupal_root; `drush sql-connect` < #{tmp_dumpfile_path}"
 
     # Remove the temporary dump file on the target server.
     run "rm #{tmp_dumpfile_path}"
@@ -87,9 +90,9 @@ namespace :mblwhoi_drupal do
     # Upload the script dir.
     upload(script_dir, "#{tmp_script_dir_path}", :via => :scp, :recursive => true)
 
-    # Run the script on the target server from the drupal dir.
+    # Run the script on the target server from the  dir.
     # The script is presumed to be the file 'script.sh'
-    run "cd #{deploy_to}/current; #{tmp_script_dir_path}/script.sh"
+    run "cd #{deploy_to}/current/drupal_root; #{tmp_script_dir_path}/script.sh"
 
     # Remove the temporary script dir on the target server.
     if "#{tmp_script_dir_path}".length > 0
