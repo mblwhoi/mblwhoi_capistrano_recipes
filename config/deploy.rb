@@ -22,11 +22,19 @@ require "#{app_settings_file}"
 set :scm, :git
 set :git_enable_submodules, true
 
+# Set branch.
+set(:branch, 'master') unless exists?(:branch)
+
 # Set deploy_to.  apps_dir is typically set in stage files.
 set (:deploy_to) { "#{apps_dir}/#{application}" }
 
 # Custom tasks namespace.
 namespace :mblwhoi do
+
+  desc "test"
+  task :test2 do
+    puts "app is: #{application}"
+  end
 
   # Task for copying files to a path relative to the shared directory root.
   desc "Copy to path in shared folder"
