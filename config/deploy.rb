@@ -64,6 +64,9 @@ namespace :mblwhoi do
     # Move dumpfile to destination path via rsync.
     run "rsync -a #{tmp_dumpfile_path}/ #{destination_path}"
 
+    # Remove the dumpfile.
+    run "rm -r #{tmp_dumpfile_path}"
+
   end
 
 end # namespace :mblwhoi
