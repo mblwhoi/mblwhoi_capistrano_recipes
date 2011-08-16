@@ -69,7 +69,7 @@ namespace :mblwhoi_drupal do
     run "cd #{deploy_to}/current/drupal_root; `drush sql-connect` < #{tmp_dumpfile_path}"
 
     # Remove the temporary dump file on the target server.
-    run "rm #{tmp_dumpfile_path}"
+    run "rm -f #{tmp_dumpfile_path}"
     
   end # task : import_db_dump
 
