@@ -37,7 +37,7 @@ cap mblwhoi_drupal:deploy -S stage=$stage -S app=$app_id
 cap mblwhoi_drupal:import_db_dump -S stage=$stage -S app=$app_id -S local_dump_file=$db_dir/$app_name.sql
 
 # Synch app's files.
-cap mblwhoi:scp_to_shared -S stage=$stage -S app=$app_id -S local_path=$files_dir/$app_name.files -S target_path=sites/default/files -S grant_web_group=true
+cap mblwhoi:scp_to_shared -S stage=$stage -S app=$app_id -S local_path=$files_dir/$app_name.files -S target_path=sites/default/files -S grant_web_group=true; chmod -R g+w
 
 # Run clear cache script.
 cap mblwhoi_drupal:run_script -S stage=$stage -S app=$app_id -S script_dir=$clear_cache_script_dir
