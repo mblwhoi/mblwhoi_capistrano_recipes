@@ -1,9 +1,19 @@
-This repository contains resources for MBLWHOI capistrano recipes.
+This repository contains resources for MBLWHOI capistrano recipes designed to work work with infrastructure conventions for MBLWHOI Library websites.
 
-The default recipe, defined in config/deploy.rb, loads configuration from 'stage' files and 'app' files.  The 'stage' and 'app' are indicated via the '-S' flag on the command line.  This allows for common configuration settings to be shared and loaded dynamically.
+= Dependencies
 
-Stage files are stored in config/stages.  
+* railsless-deploy
 
-App files are stored in config/apps.
+= Files and Definitions
 
-There is also an mblwhoi_drupal.rb file which defines drupal-specific tasks in an mblwhoi_drupal namespace.
+* File: config/deploy.rb: The default recipe, defined in config/deploy.rb, loads dynamic configurations from 'stage' files and 'app' files.  
+
+* Definition: stage file: A stage file represents a destination server and its deployment configurations. Stage configurations are stored in the 'config/stages' dir.  See config/states/example_stage.rb .
+
+* Definition: app file: An app file represents an application's name (and thus destination folder), source repo, and symlink target.  See config/apps/example_app.rb .
+
+The 'stage' and 'app' files to be used are are indicatedd via '-S' flags on the command line.  This allows for dynamic loading of settings.
+
+* File: config/mblwhoi_drupal.rb: This file tasks specific to MBLWHOI Drupal apps.
+
+= List Tasks?
