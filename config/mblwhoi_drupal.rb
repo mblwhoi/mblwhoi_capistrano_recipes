@@ -117,13 +117,13 @@ namespace :mblwhoi_drupal do
     run "mkdir #{work_dir}"
 
     # Upload the backup file to the work dir.x
-    upload(backup_file, "#{work_dir}", :via => :scp, :recursive => true)
+    upload(backup_file, "#{work_dir}/backup_file.tar.gz", :via => :scp, :recursive => true)
 
     # Unpack the backup files.
-    run "cd #{work_dir}; mkdir backup_files; cd backup_files; tar -xzf #{backup_file}"
+    run "cd #{work_dir}; mkdir backup_files; cd backup_files; tar -xzf ../backup_file.tar.gz; mv * backup"
 
     # Unpack the drupal files archive.
-    run "cd #{work_dir}; mkdir drupal_files; cd drupal_files; tar -xf ../archive/drupal_files.tar;"
+    run "cd #{work_dir}; mkdir drupal_files; cd drupal_files; tar -xf ../backup_files/backup/archive/drupal_files.tar;"
 
     # Grant ownership on files to web group.
     run "chown -R #{user}:#{web_group} #{work_dir}/drupal_files"
@@ -132,7 +132,7 @@ namespace :mblwhoi_drupal do
     run "drupal_files_dir=`find #{work_dir}/drupal_files -regex \".*sites/default/files\" -type d`; rsync -av $drupal_files_dir/ #{shared_path}/sites/default/files/; "
 
     # Sync the database.
-    run "cd #{deploy_to}/current/drupal_root; `drush sql-connect` < #{work_dir}/MySQL/*.sql;"
+    run "sql_file=`ls -1 #{work_dir}/backup_files/backup/MySQL/*.sql |head -1`; cd #{deploy_to}/current/drupal_root; `drush sql-connect` < $sql_file"
 
     # Remove the work dir.
     if "#{work_dir}".length > 0
