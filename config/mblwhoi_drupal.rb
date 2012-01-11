@@ -125,11 +125,11 @@ namespace :mblwhoi_drupal do
     # Unpack the drupal files archive.
     run "cd #{work_dir}; mkdir drupal_files; cd drupal_files; tar -xf ../backup_files/backup/archive/drupal_files.tar;"
 
-    # Grant ownership on files to web group.
-    run "chown -R #{user}:#{web_group} #{work_dir}/drupal_files"
+    # Grant ownership and permissions on files to web group.
+    run "chown -R #{user}:#{web_group} #{work_dir}/drupal_files; chmod -R 775 #{work_dir}/drupal_files"
 
     # Sync the drupal files to the site's shared directory.
-    run "drupal_files_dir=`find #{work_dir}/drupal_files -regex \".*sites/default/files\" -type d`; rsync -av $drupal_files_dir/ #{shared_path}/sites/default/files/; "
+    run "drupal_files_dir=`find #{work_dir}/drupal_files -regex \".*sites/default/files\" -type d`; rsync -rl $drupal_files_dir/ #{shared_path}/sites/default/files/; "
 
     # Sync the database.
     run "sql_file=`ls -1 #{work_dir}/backup_files/backup/MySQL/*.sql |head -1`; cd #{deploy_to}/current/drupal_root; `drush sql-connect` < $sql_file"
