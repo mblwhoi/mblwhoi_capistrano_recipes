@@ -7,10 +7,8 @@ Capistrano::Configuration.instance.load do
   set :user, "deploy"
   set :use_sudo, false
 
-  set :branch, "master"
-
-  set :apps_dir, "/data/www/dla.whoi.edu/apps"
-  set :docroot_dir, "/data/www/dla.whoi.edu/htdocs"
+  set :apps_dir, "/data/www/mblwhoilibrary.org/apps"
+  set :docroot_dir, "/data/www/mblwhoilibrary.org/htdocs"
   
   set :web_group, "www-data"
 
